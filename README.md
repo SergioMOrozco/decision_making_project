@@ -1,8 +1,8 @@
 # Installation
 - clone this repo: 
 ```
-git clone https://github.com/YunzhuLi/DPI-Net.git
-cd DPI-Net
+https://github.com/SergioMOrozco/decision_making_project.git
+cd decision_making_project
 git submodule update --init --recursive
 ```
 ## Install Dependencies
