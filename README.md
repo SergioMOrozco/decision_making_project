@@ -25,3 +25,8 @@ pip install setuptools==65.5.0 pip==21
 cd dreamerv3/
 pip install -r requirements.txt
 ```
+## Confirm Installation
+- You can confirm that dreamerV3 was installed correctly by running the following without error:
+```
+python example.py
+```
