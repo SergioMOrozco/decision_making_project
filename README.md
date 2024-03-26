@@ -3,7 +3,6 @@
 ```
 https://github.com/SergioMOrozco/decision_making_project.git
 cd decision_making_project
-git submodule update --init --recursive
 ```
 ## Install Dependencies
 - This project requires the use of Python 3.11, which can be installed using Conda like so:
