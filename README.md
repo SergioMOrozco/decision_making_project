@@ -6,7 +6,11 @@ cd DPI-Net
 git submodule update --init --recursive
 ```
 ## Install Dependencies
-
+- This project requires the use of Python 3.11, which can be installed using Conda like so:
+```
+conda create -n dreamer_v3 python=3.11
+conda activate dreamer_v3
+```
 - install JAX for NVIDIA GPU hardware:
 ```
 pip install -U "jax[cuda12_pip]" -f https://storage.googleapis.com/jax-releases/jax_cuda_releases.html
