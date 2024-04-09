@@ -31,6 +31,7 @@ sudo docker run -v ~/dev/decision_making_project/softgym/:/workspace/softgym/ -v
 - Compile PyFleX in docker environment:
 ```
 export PATH="/workspace/anaconda3/envs/softgym/bin:$PATH"
+cd softgym
 . ./prepare_1.0.sh && ./compile_1.0.sh
 ```
 
