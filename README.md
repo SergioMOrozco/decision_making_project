@@ -59,7 +59,7 @@ pip install -U "jax[cuda12_pip]" -f https://storage.googleapis.com/jax-releases/
 
 - install Gym dependencies:
 ```
-pip install setuptools==65.5.0 pip==21
+python -m pip install --upgrade pip setuptools wheel
 ```
 - install Dreamer dependencies:
 ```
