@@ -24,7 +24,7 @@ conda install pybind11
 
 - run docker container like so (obviously change to where PyFleX and anacodna is installed on your machine):
 ```
-sudo docker run -v ~/dev/decision_making_project/softgym/:/workspace/softgym/ -v ~/anaconda3/envs/softgym/:/workspace/anaconda3/envs/softgym/ -v /tmp/.X11-unix/:/tmp/.X11-unix/ --gpus all -e DISPLAY=$DISPLAY -e QT_X11_NO_MITSHM=1 -it xingyu/softgym:latest bash
+sudo docker run -v ~/dev/decision_making_project/softagent/softgym/:/workspace/softgym/ -v ~/anaconda3/envs/softgym/:/workspace/anaconda3/envs/softgym/ -v /tmp/.X11-unix/:/tmp/.X11-unix/ --gpus all -e DISPLAY=$DISPLAY -e QT_X11_NO_MITSHM=1 -it xingyu/softgym:latest bash
 
 ```
 
@@ -37,7 +37,7 @@ cd softgym
 
 - exit the docker container, and add the following to ~/.bashrc:
 ```
-export PYFLEXROOT=/home/sorozco0612/dev/decision_making_project/softgym/PyFleX
+export PYFLEXROOT=/home/sorozco0612/dev/decision_making_project/softagent/softgym/PyFleX
 export PYTHONPATH=${PYFLEXROOT}/bindings/build:$PYTHONPATH
 export LD_LIBRARY_PATH=${PYFLEXROOT}/external/SDL2-2.0.4/lib/x64:$LD_LIBRARY_PATH
 ```
@@ -51,6 +51,7 @@ conda activate softgym
 - confirm that softgym can run with PyFlex by running the following example:
 
 ```
+cd softagent/softgym/
 python examples/random_env.py --env_name PassWater
 ```
 
@@ -70,7 +71,7 @@ python -m pip install --upgrade pip setuptools wheel
 ```
 - install Dreamer dependencies:
 ```
-cd dreamerv3/
+cd softagent/dreamerv3/
 pip install -r requirements.txt
 ```
 
