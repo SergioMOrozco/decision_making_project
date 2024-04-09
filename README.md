@@ -7,8 +7,7 @@ cd decision_making_project
 ## Create Environment
 - create environment and install softgym dependencies 
 ```
-cd softgym
-conda env create -f environment.yml
+conda env create -f my_conda.yaml
 conda activate softgym 
 ```
 

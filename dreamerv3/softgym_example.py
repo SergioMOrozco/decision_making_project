@@ -4,6 +4,16 @@ from dreamerv3 import embodied
 import crafter
 from embodied.envs import from_gym
 
+import os.path as osp
+import argparse
+import numpy as np
+
+from softgym.registered_env import env_arg_dict, SOFTGYM_ENVS
+from softgym.utils.normalized_env import normalize
+from softgym.utils.visualization import save_numpy_as_gif
+import pyflex
+from matplotlib import pyplot as plt
+
 
 def main():
 
