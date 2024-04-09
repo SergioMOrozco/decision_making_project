@@ -7,7 +7,7 @@ cd decision_making_project
 ## Create Environment
 - create environment and install softgym dependencies 
 ```
-conda env create -f my_conda.yaml
+conda create -n softgym python=3.11
 conda activate softgym 
 ```
 
@@ -15,6 +15,11 @@ conda activate softgym
 - install docker-ce, then:
 ```
 sudo docker pull xingyu/softgym
+```
+
+- install pybind11 like so:
+```
+conda install pybind11
 ```
 
 - run docker container like so (obviously change to where PyFleX and anacodna is installed on your machine):
@@ -48,6 +53,8 @@ conda activate softgym
 python examples/random_env.py --env_name PassWater
 ```
 
+- keep installing missing dependencies as they come up. Rather than working with ```environment.yml``` we let pip and conda automatically resolve dependencies and versions
+
 ## Install Dreamer Dependencies
 
 - install JAX for NVIDIA GPU hardware:
@@ -72,3 +79,5 @@ pip install -r requirements.txt
 ```
 python example.py
 ```
+
+- keep installing missing dependencies as they come up. Rather than working with ```requirements.txt``` we let pip and conda automatically resolve dependencies and versions

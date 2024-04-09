@@ -2,6 +2,7 @@ name: softgym
 channels:
   - defaults
 dependencies:
+  - python=3.11
   - _libgcc_mutex=0.1=main
   - _openmp_mutex=5.1=1_gnu
   - bzip2=1.0.8=h5eee18b_5
@@ -106,4 +107,3 @@ dependencies:
       - werkzeug==3.0.2
       - wheel==0.43.0
       - wrapt==1.16.0
-prefix: /home/sorozco0612/anaconda3/envs/softgym
