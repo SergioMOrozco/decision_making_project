@@ -73,6 +73,7 @@ python -m pip install --upgrade pip setuptools wheel
 ## Confirm Installation
 - You can confirm that dreamerV3 was installed correctly by running the following without error:
 ```
+cd softagent/dreamerv3/
 python example.py
 ```
 
