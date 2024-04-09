@@ -69,12 +69,6 @@ pip install -U "jax[cuda12_pip]" -f https://storage.googleapis.com/jax-releases/
 ```
 python -m pip install --upgrade pip setuptools wheel
 ```
-- install Dreamer dependencies:
-```
-cd softagent/dreamerv3/
-pip install -r requirements.txt
-```
-
 
 ## Confirm Installation
 - You can confirm that dreamerV3 was installed correctly by running the following without error:
