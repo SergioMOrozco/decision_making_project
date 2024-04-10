@@ -21,7 +21,7 @@
     "headless": true,
     "horizon": 100,
     "num_picker": 2,
-    "num_variations": 1000,
+    "num_variations": 1,
     "observation_mode": "key_point",
     "render": true,
     "render_mode": "cloth",
