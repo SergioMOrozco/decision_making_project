@@ -1,10 +1,10 @@
 import numpy as np
 import random
 import pyflex
-from softgym.envs.cloth_env import ClothEnv
+from softgym.softgym.envs.cloth_env import ClothEnv
 from copy import deepcopy
-from softgym.utils.misc import vectorized_range, vectorized_meshgrid
-from softgym.utils.pyflex_utils import center_object
+from softgym.softgym.utils.misc import vectorized_range, vectorized_meshgrid
+from softgym.softgym.utils.pyflex_utils import center_object
 
 
 class ClothFlattenEnv(ClothEnv):
@@ -98,7 +98,7 @@ class ClothFlattenEnv(ClothEnv):
         px = np.linspace(0, cloth_dimx * self.cloth_particle_radius, cloth_dimx)
         py = np.linspace(0, cloth_dimz * self.cloth_particle_radius, cloth_dimz)
         xx, yy = np.meshgrid(px, py)
-        new_pos = np.empty(shape=(N, 4), dtype=np.float)
+        new_pos = np.empty(shape=(N, 4), dtype=float)
         new_pos[:, 0] = xx.flatten()
         new_pos[:, 1] = self.cloth_particle_radius
         new_pos[:, 2] = yy.flatten()

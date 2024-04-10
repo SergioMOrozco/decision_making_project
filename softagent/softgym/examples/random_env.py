@@ -2,9 +2,9 @@ import os.path as osp
 import argparse
 import numpy as np
 
-from softgym.registered_env import env_arg_dict, SOFTGYM_ENVS
-from softgym.utils.normalized_env import normalize
-from softgym.utils.visualization import save_numpy_as_gif
+from softgym.softgym.registered_env import env_arg_dict, SOFTGYM_ENVS
+from softgym.softgym.utils.normalized_env import normalize
+from softgym.softgym.utils.visualization import save_numpy_as_gif
 import pyflex
 from matplotlib import pyplot as plt
 

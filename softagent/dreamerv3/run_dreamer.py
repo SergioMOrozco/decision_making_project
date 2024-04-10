@@ -1,11 +1,8 @@
 import time
 import click
-from planet.train import run_task
-
-#import sys
-#sys.path.insert(0,'/home/sorozco0612/dev/decision_making_project/softagent/softgym/')
-
-from softgym.softgym.registered_env import env_arg_dict
+from chester.run_exp import run_experiment_lite, VariantGenerator
+from dreamer.train import run_task
+from softgym.registered_env import env_arg_dict
 
 
 def main():

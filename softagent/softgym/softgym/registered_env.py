@@ -1,13 +1,13 @@
-from softgym.envs.pour_water import PourWaterPosControlEnv
-from softgym.envs.pour_water_amount import PourWaterAmountPosControlEnv
-from softgym.envs.pass_water import PassWater1DEnv
-from softgym.envs.rope_flatten import RopeFlattenEnv
-from softgym.envs.rope_configuration import RopeConfigurationEnv
-from softgym.envs.cloth_flatten import ClothFlattenEnv
-from softgym.envs.cloth_fold import ClothFoldEnv
-from softgym.envs.cloth_drop import ClothDropEnv
-from softgym.envs.cloth_fold_crumpled import ClothFoldCrumpledEnv
-from softgym.envs.cloth_fold_drop import ClothFoldDropEnv
+from softgym.softgym.envs.pour_water import PourWaterPosControlEnv
+from softgym.softgym.envs.pour_water_amount import PourWaterAmountPosControlEnv
+from softgym.softgym.envs.pass_water import PassWater1DEnv
+from softgym.softgym.envs.rope_flatten import RopeFlattenEnv
+from softgym.softgym.envs.rope_configuration import RopeConfigurationEnv
+from softgym.softgym.envs.cloth_flatten import ClothFlattenEnv
+from softgym.softgym.envs.cloth_fold import ClothFoldEnv
+from softgym.softgym.envs.cloth_drop import ClothDropEnv
+from softgym.softgym.envs.cloth_fold_crumpled import ClothFoldCrumpledEnv
+from softgym.softgym.envs.cloth_fold_drop import ClothFoldDropEnv
 
 from collections import OrderedDict
 

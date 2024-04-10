@@ -2,13 +2,13 @@ import cv2
 import numpy as np
 import torch
 import gym
-import softgym
+import softgym.softgym
 from gym.spaces import Box
 
-from softgym.registered_env import SOFTGYM_ENVS
-from softgym.utils.normalized_env import normalize
+from softgym.softgym.registered_env import SOFTGYM_ENVS
+from softgym.softgym.utils.normalized_env import normalize
 
-softgym.register_flex_envs()
+#softgym.register_flex_envs()
 
 
 # Preprocesses an observation inplace (from float32 Tensor [0, 255] to [-0.5, 0.5])
