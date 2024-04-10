@@ -22,7 +22,7 @@
     "horizon": 100,
     "num_picker": 2,
     "num_variations": 1,
-    "observation_mode": "key_point",
+    "observation_mode": "cam_rgb",
     "render": true,
     "render_mode": "cloth",
     "use_cached_states": true
