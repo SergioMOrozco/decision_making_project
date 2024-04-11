@@ -37,8 +37,9 @@ cd softgym
 
 - exit the docker container, and add the following to ~/.bashrc:
 ```
-export PYFLEXROOT=/home/sorozco0612/dev/decision_making_project/softagent/softgym/PyFleX
-export PYTHONPATH=${PYFLEXROOT}/bindings/build:$PYTHONPATH
+export SOFTGYMROOT=/home/sorozco0612/dev/decision_making_project/softagent/softgym
+export PYFLEXROOT=${SOFTGYMROOT}/PyFleX
+export PYTHONPATH=${SOFTGYMROOT}:${PYFLEXROOT}/bindings/build:$PYTHONPATH
 export LD_LIBRARY_PATH=${PYFLEXROOT}/external/SDL2-2.0.4/lib/x64:$LD_LIBRARY_PATH
 ```
 
