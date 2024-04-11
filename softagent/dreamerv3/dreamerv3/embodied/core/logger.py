@@ -27,7 +27,8 @@ class Logger:
     for name, value in dict(mapping).items():
       name = f'{prefix}/{name}' if prefix else name
       value = np.asarray(value)
-      if len(value.shape) not in (0, 1, 2, 3, 4):
+      #if len(value.shape) not in (0, 1, 2, 3, 4):
+      if len(value.shape) not in (0, 1, 2, 3, 4, 5):
         raise ValueError(
             f"Shape {value.shape} for name '{name}' cannot be "
             "interpreted as scalar, histogram, image, or video.")

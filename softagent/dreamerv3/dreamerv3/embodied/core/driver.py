@@ -45,6 +45,9 @@ class Driver:
     assert all(len(x) == len(self._env) for x in self._acts.values())
     acts = {k: v for k, v in self._acts.items() if not k.startswith('log_')}
     obs = self._env.step(acts)
+    ## softgym outputs images as (1,color,column,row), but we want (1,row,column,color)
+    obs['image'] = np.squeeze(obs['image'], axis=0)
+    obs['image'] = np.transpose(obs['image'],(0, 3, 2, 1))
     obs = {k: convert(v) for k, v in obs.items()}
     assert all(len(x) == len(self._env) for x in obs.values()), obs
     acts, self._state = policy(obs, self._state, **self._kwargs)

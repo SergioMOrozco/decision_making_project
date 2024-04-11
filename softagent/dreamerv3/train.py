@@ -59,7 +59,8 @@ def run_task(arg_vv, log_dir, exp_name):
     env = from_gym.FromGym(env, obs_key='image')  # Or obs_key='vector'.
     env = dreamerv3.wrap_env(env, config)
     env = embodied.BatchEnv([env], parallel=False)
-    agent = dreamerv3.Agent(env.observation_space, env.act_space, step, config)
+    #agent = dreamerv3.Agent(env.observation_space, env.action_space, step, config)
+    agent = dreamerv3.Agent(env.obs_space, env.act_space, step, config)
 
     replay = embodied.replay.Uniform(
       config.batch_length, config.replay_size, logdir / 'replay')
