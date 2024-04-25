@@ -1,18 +1,14 @@
-import time
-import click
+import argparse
 from train import run_task
 from softgym.registered_env import env_arg_dict
 
 
 def main():
-    import argparse
     parser = argparse.ArgumentParser()
-
-
     # Experiment
     parser.add_argument('--exp_name', default='Dreamer', type=str)
-    parser.add_argument('--env_name', default='ClothFlatten')
-    parser.add_argument('--log_dir', default='./data/dreamer/')
+    parser.add_argument('--env_name', default='RopeFlatten')
+    parser.add_argument('--log_dir', default='~/logdir/rope_flatten_xlg_run_1', type=str)
     parser.add_argument('--seed', default=100, type=int)
 
     # PlaNet

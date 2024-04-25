@@ -27,7 +27,7 @@ def run_task(arg_vv, log_dir, exp_name):
     config = embodied.Config(dreamerv3.configs['defaults'])
     config = config.update(dreamerv3.configs['xlarge'])
     config = config.update({
-      'logdir': '~/logdir/run1',
+      'logdir': log_dir,
       'run.train_ratio': 64,
       'run.log_every': 30,  # Seconds
       'batch_size': 1,
