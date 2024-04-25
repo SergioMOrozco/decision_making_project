@@ -18,17 +18,19 @@ def update_env_kwargs(vv):
 def run_task(arg_vv, log_dir, exp_name):
     if arg_vv['algorithm'] == 'planet':
         from planet.config import DEFAULT_PARAMS
+    elif arg_vv['algorithm'] == 'dreamer':
+        from config import DEFAULT_PARAMS
     else:
         raise NotImplementedError
 
     # See configs.yaml for all options.
     config = embodied.Config(dreamerv3.configs['defaults'])
-    config = config.update(dreamerv3.configs['medium'])
+    config = config.update(dreamerv3.configs['xlarge'])
     config = config.update({
       'logdir': '~/logdir/run1',
       'run.train_ratio': 64,
       'run.log_every': 30,  # Seconds
-      'batch_size': 16,
+      'batch_size': 1,
       'jax.prealloc': False,
       'encoder.mlp_keys': '$^',
       'decoder.mlp_keys': '$^',

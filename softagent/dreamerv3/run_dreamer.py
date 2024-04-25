@@ -10,9 +10,9 @@ def main():
 
 
     # Experiment
-    parser.add_argument('--exp_name', default='PlaNet', type=str)
+    parser.add_argument('--exp_name', default='Dreamer', type=str)
     parser.add_argument('--env_name', default='ClothFlatten')
-    parser.add_argument('--log_dir', default='./data/planet/')
+    parser.add_argument('--log_dir', default='./data/dreamer/')
     parser.add_argument('--seed', default=100, type=int)
 
     # PlaNet
@@ -33,7 +33,7 @@ def main():
 
     args = parser.parse_args()
 
-    args.algorithm = 'planet'
+    args.algorithm = 'dreamer'
 
     # Set env_specific parameters
     env_name = args.env_name
