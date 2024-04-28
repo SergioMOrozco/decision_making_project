@@ -1,6 +1,6 @@
 import time
 import click
-from chester.run_exp import run_experiment_lite, VariantGenerator
+#from chester.run_exp import run_experiment_lite, VariantGenerator
 from planet.train import run_task
 from softgym.registered_env import env_arg_dict
 
@@ -30,7 +30,7 @@ def main():
     parser.add_argument('--env_kwargs_camera_name', default='default_camera', type=str)
     parser.add_argument('--env_kwargs_observation_mode', default='cam_rgb', type=str)  # Should be in ['key_point', 'cam_rgb', 'point_cloud']
     parser.add_argument('--env_kwargs_deterministic', default=False, type=bool)  # Should be in ['key_point', 'cam_rgb', 'point_cloud']
-    parser.add_argument('--env_kwargs_num_variations', default=1, type=str)
+    parser.add_argument('--env_kwargs_num_variations', default=1, type=int)
     args = parser.parse_args()
 
     args.algorithm = 'planet'
