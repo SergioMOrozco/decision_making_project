@@ -79,3 +79,11 @@ python example.py
 ```
 
 - keep installing missing dependencies as they come up. Rather than working with ```requirements.txt``` we let pip and conda automatically resolve dependencies and versions
+
+## Running PlaNet
+To reproduce our results on PlaNet run the following script
+```
+cd softagents
+./run_expts.sh
+```
+Install dependencies as prompted
