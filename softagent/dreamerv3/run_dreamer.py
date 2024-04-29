@@ -7,8 +7,8 @@ def main():
     parser = argparse.ArgumentParser()
     # Experiment
     parser.add_argument('--exp_name', default='Dreamer', type=str)
-    parser.add_argument('--env_name', default='RopeFlatten')
-    parser.add_argument('--log_dir', default='~/logdir/rope_flatten_xlg_run_1', type=str)
+    parser.add_argument('--env_name', default='ClothFold')
+    parser.add_argument('--log_dir', default='~/logdir/colth_fold_xlg_run_1', type=str)
     parser.add_argument('--seed', default=100, type=int)
 
     # PlaNet
