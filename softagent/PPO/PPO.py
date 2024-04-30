@@ -5,6 +5,8 @@ from torch.distributions import Categorical
 
 from planet.models import Encoder
 
+
+
 ################################## set device ##################################
 print("============================================================================================")
 # set device to cpu or cuda

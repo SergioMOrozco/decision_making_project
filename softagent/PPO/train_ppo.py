@@ -8,6 +8,7 @@ import numpy as np
 
 import gym
 #import roboschool
+import cv2
 
 from PPO import PPO
 
@@ -16,8 +17,58 @@ device = torch.device('cpu')
 if(torch.cuda.is_available()): 
     device = torch.device('cuda:0') 
 
+
+# def save_tensors_to_video(tensor_list, path, fps=30):
+#     print(path)
+#     # Assuming tensors are in the format (3, 128, 128) and in the range [0, 1]
+#     # Convert the first tensor to determine the size
+#     first_frame = tensor_list[0].squeeze(0).numpy().transpose(1, 2, 0) * 255
+#     first_frame = first_frame.astype(np.uint8)
+   
+#     # Define the codec and create VideoWriter object
+#     fourcc = cv2.VideoWriter_fourcc(*'mp4v')  # 'mp4v' for .mp4, 'XVID' for .avi
+#     out = cv2.VideoWriter(path, fourcc, fps, (first_frame.shape[1], first_frame.shape[0]))
+   
+#     # Write each frame to the video
+#     for tensor in tensor_list:
+#         frame = tensor.squeeze(0).numpy().transpose(1, 2, 0) * 255
+#         frame = frame.astype(np.uint8)
+#         out.write(frame)
+   
+#     # Release everything if job is finished
+#     breakpoint()
+#     out.release()
+
+
+def save_tensors_to_video(tensor_list, path, fps=30):
+    # Check if the output directory exists, if not, create it
+    # output_dir = os.path.dirname(path)
+    # if not os.path.exists(output_dir):
+    #     os.makedirs(output_dir)
+   
+    # Assuming tensors are in the format (3, 128, 128) and in the range [0, 1]
+    first_frame = tensor_list[0].squeeze(0).numpy().transpose(1, 2, 0) * 255
+    first_frame = first_frame.astype(np.uint8)
+    print(first_frame.shape[0])
+   
+    # Define the codec and create VideoWriter object
+    # Using 'XVID' for .avi file
+    fourcc = cv2.VideoWriter_fourcc(*'mp4v')
+    out = cv2.VideoWriter(path, fourcc, fps, (first_frame.shape[1], first_frame.shape[0]))
+    #assert out.is_Opened()
+    # Write each frame to the video
+    for tensor in tensor_list:
+        frame = tensor.squeeze(0).numpy().transpose(1, 2, 0) * 255
+        frame = frame.astype(np.uint8)
+        frame = cv2.cvtColor(frame, cv2.COLOR_RGB2BGR)
+        out.write(frame)
+    # Release everything if job is finished
+    out.release()
+    print(path)
+
 ################################### Training ###################################
 def train(env, env_name, vv):
+    total_episodes  = 1000
     # env_name = "CartPole-v1"
     # env = gym.make(env_name)
     print("============================================================================================")
@@ -26,11 +77,8 @@ def train(env, env_name, vv):
 
     has_continuous_action_space = True  # continuous action space; else discrete
 
-    # TODO:this becomes env.horizon
     max_ep_len = env.horizon                   # max timesteps in one episode
-    # TODO: make this episode based 
     max_training_timesteps = int(3e6)   # break training loop if timeteps > max_training_timesteps
-    #TODO
     print_freq = max_ep_len * 2 #10        # print avg reward in the interval (in num timesteps)
     log_freq = max_ep_len * 2           # log avg reward in the interval (in num timesteps)
     save_model_freq = int(1e5)          # save model frequency (in num timesteps)
@@ -48,21 +96,19 @@ def train(env, env_name, vv):
     K_epochs = 80               # update policy for K epochs in one PPO update
 
     eps_clip = 0.2          # clip parameter for PPO
-    gamma = 0.99            # discount factor
+    gamma = 1               # discount factor
 
     lr_actor = 0.0003       # learning rate for actor network
     lr_critic = 0.001       # learning rate for critic network
 
-    random_seed = 0         # set random seed if required (0 = no random seed)
+    random_seed = vv['seed']         # set random seed if required (0 = no random seed)
     #####################################################
 
     # state space dimension
-    #TODO
     state_dim = vv['embedding_size'] #torch.prod(torch.tensor(env.observation_space.shape)).item()
 
     # action space dimension
     if has_continuous_action_space:
-        # TODO
         action_dim = env.action_space.shape[0]
     else:
         action_dim = env.action_space.n
@@ -84,14 +130,14 @@ def train(env, env_name, vv):
     run_num = len(current_num_files)
 
     #### create new log file for each run
-    log_f_name = log_dir + '/PPO_' + env_name + "_log_" + str(run_num) + ".csv"
+    log_f_name = log_dir + "/PPO_" + env_name + "_log_" + str(run_num) + "_seed_" + str(random_seed) + ".csv"
 
     print("current logging run number for " + env_name + " : ", run_num)
     print("logging at : " + log_f_name)
     #####################################################
 
     ################### checkpointing ###################
-    run_num_pretrained = 0      #### change this to prevent overwriting weights in same env_name folder
+    run_time = datetime.now().replace(microsecond=0)      #### change this to prevent overwriting weights in same env_name folder
 
     directory = "PPO_preTrained"
     if not os.path.exists(directory):
@@ -102,10 +148,12 @@ def train(env, env_name, vv):
           os.makedirs(directory)
 
 
-    checkpoint_path = directory + "PPO_{}_{}_{}.pth".format(env_name, random_seed, run_num_pretrained)
+    checkpoint_path = directory + "PPO_{}_{}_{}.pth".format(env_name, random_seed, run_time)
     print("save checkpoint path : " + checkpoint_path)
-    add encoder to params
     #####################################################
+    video_path = log_dir + "episode_videos/"
+    if not os.path.exists(video_path):
+        os.makedirs(video_path) 
 
 
     ############# print all hyperparameters #############
@@ -140,7 +188,7 @@ def train(env, env_name, vv):
         print("--------------------------------------------------------------------------------------------")
         print("setting random seed to ", random_seed)
         torch.manual_seed(random_seed)
-        env.seed(random_seed)
+        #env.seed(random_seed)
         np.random.seed(random_seed)
     #####################################################
 
@@ -158,7 +206,7 @@ def train(env, env_name, vv):
 
     # logging file
     log_f = open(log_f_name,"w+")
-    log_f.write('episode,timestep,reward\n')
+    log_f.write(f'episode,timestep,reward, {datetime.now().replace(microsecond=0)}\n')
 
     # printing and logging variables
     print_running_reward = 0
@@ -171,19 +219,18 @@ def train(env, env_name, vv):
     i_episode = 0
 
     # training loop
-    while time_step <= max_training_timesteps:
+    while i_episode < total_episodes: #time_step <= max_training_timesteps:
         #breakpoint()
         state = env.reset()
-        #TODO
         #state = torch.flatten(state)
         current_ep_reward = 0
-
+        observations = []
         for t in range(1, max_ep_len+1):
 
             # select action with policy
             action = ppo_agent.select_action(state)
-            state, reward, done, _ = env.step(action) 
-            #TODO
+            state, reward, done, _ = env.step(action)
+            observations.append(state) 
             #state = torch.flatten(state)
 
             # saving reward and is_terminals
@@ -238,6 +285,9 @@ def train(env, env_name, vv):
             # break; if the episode is over
             if done:
                 break
+
+        if i_episode % 5 == 0: # save videos
+            save_tensors_to_video(observations, video_path + f"episode-{i_episode}.mp4")
 
         print_running_reward += current_ep_reward
         print_running_episodes += 1
