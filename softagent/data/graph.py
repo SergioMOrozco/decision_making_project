@@ -21,6 +21,11 @@ def get_data_from_csv(filename,x_idx,y_idx):
 
     return x,y
 
+def clip(x, y, max_steps):
+    x = [i for i in x if i <= 60000]
+    y = y[:len(x)]
+    return np.array(x), np.array(y)
+
 def smooth_data(x,y):
     x_smoothed= np.linspace(x.min(), x.max(), 50)
     gfg = make_interp_spline(x, y, k=3)
@@ -28,12 +33,14 @@ def smooth_data(x,y):
 
     return x_smoothed,y_smoothed
 
-def graph_data(filename,color,ax, algorithm, title,x_idx,y_idx):
+def graph_data(filename,color,ax, algorithm, title,x_idx,y_idx,max_steps):
     x,y = get_data_from_csv(filename,x_idx,y_idx)
+    x,y = clip(x,y,max_steps)
 
     x_smoothed, y_smoothed = smooth_data(x, y)
+    x_smoothed, y_smoothed = clip(x_smoothed, y_smoothed,max_steps)
 
-    ax.set(xlabel='Episode', ylabel='Reward')
+    ax.set(xlabel='Steps', ylabel='Reward')
     ax.set_title(title)
 
     ax.plot(x, y, color=color, alpha=0.2)
@@ -44,13 +51,13 @@ def main():
     fig, axs = plt.subplots(3)
     fig.tight_layout(pad=2.0)
     fig.suptitle('Results')
-    graph_data('dreamer_cloth_flatten_1.csv', 'green',axs[0], "Dreamer", 'Cloth Flatten',1,2)
-    graph_data('dreamer_rope_flatten_1.csv', 'green',axs[1], "Dreamer", 'Rope Flatten',1,2)
-    graph_data('dreamer_cloth_fold_1.csv', 'green',axs[2], "Dreamer", 'Cloth Fold',1,2)
+    graph_data('dreamer_cloth_flatten_1.csv', 'green',axs[0], "Dreamer", 'Cloth Flatten',1,2, 60000)
+    graph_data('dreamer_rope_flatten_1.csv', 'green',axs[1], "Dreamer", 'Rope Flatten',1,2, 60000)
+    graph_data('dreamer_cloth_fold_1.csv', 'green',axs[2], "Dreamer", 'Cloth Fold',1,2, 60000)
 
-    graph_data('clothflatten_seed100/progress.csv', 'blue',axs[0], "Planet", 'Cloth Flatten',8,2)
-    graph_data('ropeflatten_seed100/progress.csv', 'blue',axs[1], "Planet", 'Rope Flatten',27,8)
-    graph_data('clothfold_seed100/progress.csv', 'blue',axs[2], "Planet", 'Cloth Folds',32,29)
+    graph_data('clothflatten_seed100/progress.csv', 'blue',axs[0], "Planet", 'Cloth Flatten',16,0, 60000)
+    graph_data('ropeflatten_seed100/progress.csv', 'blue',axs[1], "Planet", 'Rope Flatten',12,5, 60000)
+    #graph_data('clothfold_seed100/progress.csv', 'blue',axs[2], "Planet", 'Cloth Folds',32,29, 60000)
     plt.show()
 
 if __name__ == "__main__":
