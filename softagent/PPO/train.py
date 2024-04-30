@@ -55,7 +55,7 @@ def run_task(arg_vv, log_dir, exp_name):
         # agent = PlaNetAgent(env, vv, device)
         # agent.train(train_epoch=vv['train_epoch'])
         from train_ppo import train
-        train(env, env_name)
+        train(env, env_name, vv)
         env.close()
     else:
         raise Exception("this should not happen")

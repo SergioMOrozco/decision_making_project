@@ -17,7 +17,7 @@ if(torch.cuda.is_available()):
     device = torch.device('cuda:0') 
 
 ################################### Training ###################################
-def train(env, env_name):
+def train(env, env_name, vv):
     # env_name = "CartPole-v1"
     # env = gym.make(env_name)
     print("============================================================================================")
@@ -27,11 +27,11 @@ def train(env, env_name):
     has_continuous_action_space = True  # continuous action space; else discrete
 
     # TODO:this becomes env.horizon
-    max_ep_len = 1000                   # max timesteps in one episode
+    max_ep_len = env.horizon                   # max timesteps in one episode
     # TODO: make this episode based 
     max_training_timesteps = int(3e6)   # break training loop if timeteps > max_training_timesteps
     #TODO
-    print_freq = max_ep_len * 1 #10        # print avg reward in the interval (in num timesteps)
+    print_freq = max_ep_len * 2 #10        # print avg reward in the interval (in num timesteps)
     log_freq = max_ep_len * 2           # log avg reward in the interval (in num timesteps)
     save_model_freq = int(1e5)          # save model frequency (in num timesteps)
 
@@ -44,8 +44,7 @@ def train(env, env_name):
     ## Note : print/log frequencies should be > than max_ep_len
 
     ################ PPO hyperparameters ################
-    #TODO
-    update_timestep = 10 #max_ep_len * 4      # update policy every n timesteps
+    update_timestep = max_ep_len * 4      # update policy every n timesteps
     K_epochs = 80               # update policy for K epochs in one PPO update
 
     eps_clip = 0.2          # clip parameter for PPO
@@ -59,15 +58,15 @@ def train(env, env_name):
 
     # state space dimension
     #TODO
-    state_dim = 2 #env.observation_space.shape[0]
+    state_dim = vv['embedding_size'] #torch.prod(torch.tensor(env.observation_space.shape)).item()
 
     # action space dimension
     if has_continuous_action_space:
         # TODO
-        action_dim = 1 #env.action_space.shape[0]
+        action_dim = env.action_space.shape[0]
     else:
         action_dim = env.action_space.n
-
+    vv["dimo"] = env.observation_size
     ###################### logging ######################
 
     #### log files for multiple runs are NOT overwritten
@@ -105,6 +104,7 @@ def train(env, env_name):
 
     checkpoint_path = directory + "PPO_{}_{}_{}.pth".format(env_name, random_seed, run_num_pretrained)
     print("save checkpoint path : " + checkpoint_path)
+    add encoder to params
     #####################################################
 
 
@@ -149,8 +149,7 @@ def train(env, env_name):
     ################# training procedure ################
 
     # initialize a PPO agent
-    ppo_agent = PPO(state_dim, action_dim, lr_actor, lr_critic, gamma, K_epochs, eps_clip, has_continuous_action_space, action_std)
-
+    ppo_agent = PPO(state_dim, action_dim, lr_actor, lr_critic, gamma, K_epochs, eps_clip, has_continuous_action_space, action_std, vv = vv)
     # track total training time
     start_time = datetime.now().replace(microsecond=0)
     print("Started training at (GMT) : ", start_time)
@@ -174,22 +173,18 @@ def train(env, env_name):
     # training loop
     while time_step <= max_training_timesteps:
         #breakpoint()
-        print("here 1")
         state = env.reset()
-        print("here 2")
         #TODO
-        state = torch.tensor([0., 0.])
+        #state = torch.flatten(state)
         current_ep_reward = 0
 
         for t in range(1, max_ep_len+1):
-            print(t)
 
             # select action with policy
             action = ppo_agent.select_action(state)
             state, reward, done, _ = env.step(action) 
-            print(done)
             #TODO
-            state = torch.tensor([0., 0.])
+            #state = torch.flatten(state)
 
             # saving reward and is_terminals
             ppo_agent.buffer.rewards.append(reward)

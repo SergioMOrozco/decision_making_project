@@ -3,6 +3,8 @@ import torch.nn as nn
 from torch.distributions import MultivariateNormal
 from torch.distributions import Categorical
 
+from planet.models import Encoder
+
 ################################## set device ##################################
 print("============================================================================================")
 # set device to cpu or cuda
@@ -36,8 +38,11 @@ class RolloutBuffer:
 
 
 class ActorCritic(nn.Module):
-    def __init__(self, state_dim, action_dim, has_continuous_action_space, action_std_init):
+    def __init__(self, state_dim, action_dim, has_continuous_action_space, action_std_init, vv):
         super(ActorCritic, self).__init__()
+
+        self.encoder = Encoder(vv['symbolic_env'], vv['dimo'], vv['embedding_size'], vv['activation_function']).to(device=device)
+
 
         self.has_continuous_action_space = has_continuous_action_space
         
@@ -82,27 +87,27 @@ class ActorCritic(nn.Module):
 
     def forward(self):
         raise NotImplementedError
-    
+
     def act(self, state):
 
         if self.has_continuous_action_space:
-            action_mean = self.actor(state)
+            action_mean = self.actor(self.encoder(state))
             cov_mat = torch.diag(self.action_var).unsqueeze(dim=0)
             dist = MultivariateNormal(action_mean, cov_mat)
         else:
-            action_probs = self.actor(state)
+            action_probs = self.actor(self.encoder(state))
             dist = Categorical(action_probs)
 
         action = dist.sample()
         action_logprob = dist.log_prob(action)
-        state_val = self.critic(state)
+        state_val = self.critic(self.encoder(state))
 
         return action.detach(), action_logprob.detach(), state_val.detach()
     
     def evaluate(self, state, action):
 
         if self.has_continuous_action_space:
-            action_mean = self.actor(state)
+            action_mean = self.actor(self.encoder(state))
             
             action_var = self.action_var.expand_as(action_mean)
             cov_mat = torch.diag_embed(action_var).to(device)
@@ -112,18 +117,17 @@ class ActorCritic(nn.Module):
             if self.action_dim == 1:
                 action = action.reshape(-1, self.action_dim)
         else:
-            action_probs = self.actor(state)
+            action_probs = self.actor(self.encoder(state))
             dist = Categorical(action_probs)
         action_logprobs = dist.log_prob(action)
         dist_entropy = dist.entropy()
-        state_values = self.critic(state)
+        state_values = self.critic(self.encoder(state))
         
         return action_logprobs, state_values, dist_entropy
 
 
 class PPO:
-    def __init__(self, state_dim, action_dim, lr_actor, lr_critic, gamma, K_epochs, eps_clip, has_continuous_action_space, action_std_init=0.6):
-
+    def __init__(self, state_dim, action_dim, lr_actor, lr_critic, gamma, K_epochs, eps_clip, has_continuous_action_space, action_std_init=0.6, vv = None):
         self.has_continuous_action_space = has_continuous_action_space
 
         if has_continuous_action_space:
@@ -135,13 +139,14 @@ class PPO:
         
         self.buffer = RolloutBuffer()
 
-        self.policy = ActorCritic(state_dim, action_dim, has_continuous_action_space, action_std_init).to(device)
+        self.policy = ActorCritic(state_dim, action_dim, has_continuous_action_space, action_std_init, vv).to(device)
         self.optimizer = torch.optim.Adam([
                         {'params': self.policy.actor.parameters(), 'lr': lr_actor},
-                        {'params': self.policy.critic.parameters(), 'lr': lr_critic}
+                        {'params': self.policy.critic.parameters(), 'lr': lr_critic},
+                        {'params': self.policy.encoder.parameters(), 'lr': 0.001}
                     ])
 
-        self.policy_old = ActorCritic(state_dim, action_dim, has_continuous_action_space, action_std_init).to(device)
+        self.policy_old = ActorCritic(state_dim, action_dim, has_continuous_action_space, action_std_init, vv).to(device)
         self.policy_old.load_state_dict(self.policy.state_dict())
         
         self.MseLoss = nn.MSELoss()

@@ -4,7 +4,6 @@ import click
 from train import run_task
 from softgym.registered_env import env_arg_dict
 
-
 def main():
     import argparse
     parser = argparse.ArgumentParser()
