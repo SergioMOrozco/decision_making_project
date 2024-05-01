@@ -11,11 +11,15 @@ class Flags:
 
   def parse(self, argv=None, help_exists=True):
     parsed, remaining = self.parse_known(argv)
-    for flag in remaining:
-      if flag.startswith('--'):
-        raise ValueError(f"Flag '{flag}' did not match any config keys.")
-    assert not remaining, remaining
+
     return parsed
+
+    ## This is reading any command line arguments which are meant for softgym, not dreamer
+    #for flag in remaining:
+    #  if flag.startswith('--'):
+    #    raise ValueError(f"Flag '{flag}' did not match any config keys.")
+    #assert not remaining, remaining
+    #return parsed
 
   def parse_known(self, argv=None, help_exists=False):
     if argv is None:
