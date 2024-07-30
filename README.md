@@ -1,3 +1,9 @@
+Comparative study of Dreamer V3, PlaNet, and PPO in tasks involving object deformation
+
+Writeup: https://drive.google.com/file/d/1EpgLxWMRQ9l8iS19pNttOWgUIW9-mSA9/view?usp=sharing
+
+
+
 # Installation
 - clone this repo: 
 ```
